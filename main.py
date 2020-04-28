@@ -41,11 +41,14 @@ def get_top_stories(top_stories_url):
         logger.error(f"Error [{err}]")
         raise SystemExit()
 
-
-if __name__ == "__main__":
+def cloud_functions(request):
+    from utils import send_email
+    
     top_stories = get_top_stories(top_stories_url)
     data_engineer_stories = get_data_engineer_stories(top_stories)
 
+    if data_engineer_stories:
+        send_email(data_engineer_stories)
 
 
 
