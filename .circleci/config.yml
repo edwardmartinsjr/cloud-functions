@@ -12,6 +12,9 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
+          command: sudo pip install --upgrade google-cloud-bigquery
+          name: Google Big Query lib
+      - run:
           command: python test_main.py -v
           name: Test
 

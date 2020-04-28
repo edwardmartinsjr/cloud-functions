@@ -70,6 +70,20 @@ class Test(unittest.TestCase):
             # with the given url or not
             mock_request.assert_called_once_with(url)
 
+    def test_store_data_without_args(self):
+        result = main.store_data([])
+        self.assertEqual(result, False)
+
+    def test_store_data_insert_in_free_tier(self):
+        with self.assertRaises(SystemExit): main.store_data([{
+            "id":"123",
+            "by":"by",
+            "score":"score",
+            "time":"time",
+            "title":"title",
+            "type":"type",
+            "url":"url"}])
+
 
 
 unittest.main()
