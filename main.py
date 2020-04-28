@@ -25,9 +25,25 @@ def get_data_engineer_stories(top_stories):
 
     return data_engineer_stories
 
+def get_top_stories(top_stories_url):
+    top_stories = []
+
+    try:
+        r = requests.get(top_stories_url)
+        
+        if r.status_code == 200:
+            top_stories = r.json()
+        else:
+            logger.error(f"Error code: [{r.status_code}]")
+        
+        return top_stories
+    except BaseException as err:
+        logger.error(f"Error [{err}]")
+        raise SystemExit()
+
 
 if __name__ == "__main__":
-    top_stories = requests.get(top_stories_url).json()
+    top_stories = get_top_stories(top_stories_url)
     data_engineer_stories = get_data_engineer_stories(top_stories)
 
 
