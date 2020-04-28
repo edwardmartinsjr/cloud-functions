@@ -16,24 +16,29 @@
 	
     - Send an e-mail with the links
 
-4. Test:
+4. Install requirements:
+```
+pip install -r requirements.txt
+```
+
+5. Test:
 ```
 python test_main.py -v
 ```
 
-5. Run:
+6. Run:
 ```
 python main.py
 ```
 
-6. Deploy:
+7. Deploy:
 ```
 gcloud functions deploy cloud-functions \
 --runtime python37 \
 --trigger-http
 ```
 
-7. Scheduler:
+8. Scheduler:
 ```
 gcloud scheduler jobs create http email_job cloud-functions \
 --scheduler="0 0 * * *" \
@@ -41,7 +46,7 @@ gcloud scheduler jobs create http email_job cloud-functions \
 
 ```
 
-8. Scheduler job lists:
+9. Scheduler job lists:
 ```
 gcloud scheduler jobs list
 
