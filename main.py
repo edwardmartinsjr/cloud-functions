@@ -23,7 +23,7 @@ def get_data_engineer_stories(top_stories):
         r = requests.get(item_url.format(story_id))
         if r.status_code == 200:
             story = r.json()
-            if 'data' in story['title'].lower():
+            if 'data engineer' in story['title'].lower():
                 data_engineer_stories.append(story)
         else:
             logger.error(f"Error code: [{r.status_code}]")
