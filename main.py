@@ -7,8 +7,9 @@ import os
 logger = logging.getLogger("cloud-functions")
 logger.setLevel(logging.INFO)
 
-api_key = 'xxx'
-api_secret = 'xxx'
+api_key = os.environ['MAILJET_API_KEY']
+api_secret = os.environ['MAILJET_API_SECRET']
+
 mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
 api_url = 'https://hacker-news.firebaseio.com/v0/'
