@@ -1,19 +1,9 @@
 import requests
 import logging
-from google.cloud import bigquery
-import os
 
 # Create logger
 logger = logging.getLogger("cloud-functions")
 logger.setLevel(logging.INFO)
-
-# Construct a BigQuery client object.
-client = bigquery.Client()
-
-# Prepares a reference to the dataset
-dataset_ref = client.dataset("hacker_news")
-table_ref = dataset_ref.table("stories")
-table = client.get_table(table_ref)
 
 # Set hacker-news urls
 api_url = "https://hacker-news.firebaseio.com/v0/"
@@ -52,7 +42,7 @@ def get_top_stories(top_stories_url):
         logger.error(f"Exception: [{err}]")
         raise SystemExit()
 
-def store_data(data_engineer_stories):
+def store_data(data_engineer_stories, client, table):
     try:
         if data_engineer_stories:
             for row in data_engineer_stories:
@@ -75,10 +65,21 @@ def store_data(data_engineer_stories):
         logger.error(f"Exception: [{err}]")
         raise SystemExit()
 
-def scan_hacker_news(request):    
+# GCP Function
+def scan_hacker_news(request):
+    from google.cloud import bigquery
+
+    # Construct a BigQuery client object.
+    client = bigquery.Client()
+
+    # Prepares a reference to the dataset
+    dataset_ref = client.dataset("hacker_news")
+    table_ref = dataset_ref.table("stories")
+    table = client.get_table(table_ref)
+ 
     top_stories = get_top_stories(top_stories_url)
     data_engineer_stories = get_data_engineer_stories(top_stories)
-    store_data(data_engineer_stories)
+    store_data(data_engineer_stories, client, table)
 
 if __name__ == "__main__":
     scan_hacker_news("")
