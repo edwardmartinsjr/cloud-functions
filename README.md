@@ -33,16 +33,16 @@ python main.py
 
 7. Deploy:
 ```
-gcloud functions deploy cloud-functions \
+gcloud functions deploy scan_hacker_news \
 --runtime python37 \
 --trigger-http
 ```
 
 8. Scheduler:
 ```
-gcloud scheduler jobs create http email_job cloud-functions \
---scheduler="0 0 * * *" \
---uri=https://us-central1-project.my-bigquery-project-270416/cloud-functions
+gcloud scheduler jobs create http email_job \
+--schedule="20 * * * *" \
+--uri=https://us-central1-my-bigquery-project-270416.cloudfunctions.net/scan_hacker_news
 
 ```
 

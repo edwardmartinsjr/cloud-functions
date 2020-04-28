@@ -41,7 +41,7 @@ def get_top_stories(top_stories_url):
         logger.error(f"Error [{err}]")
         raise SystemExit()
 
-def cloud_functions(request):
+def scan_hacker_news(request):
     from utils import send_email
     
     top_stories = get_top_stories(top_stories_url)
