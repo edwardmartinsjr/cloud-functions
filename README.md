@@ -14,7 +14,7 @@
 
     c. If any of their titles match "Data Engineer":
 	
-    - Send an e-mail with the links
+    - Send data to BigQuery
 
 4. Install requirements:
 ```
