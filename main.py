@@ -1,10 +1,15 @@
 import requests
 import logging
+from mailjet_rest import Client
+import os
 
 # create logger
 logger = logging.getLogger("cloud-functions")
 logger.setLevel(logging.INFO)
 
+api_key = 'xxx'
+api_secret = 'xxx'
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
 api_url = 'https://hacker-news.firebaseio.com/v0/'
 top_stories_url = api_url + 'topstories.json'
@@ -41,14 +46,45 @@ def get_top_stories(top_stories_url):
         logger.error(f"Error [{err}]")
         raise SystemExit()
 
-def scan_hacker_news(request):
-    from utils import send_email
-    
+def scan_hacker_news(request):    
     top_stories = get_top_stories(top_stories_url)
     data_engineer_stories = get_data_engineer_stories(top_stories)
 
-    if data_engineer_stories:
-        send_email(data_engineer_stories)
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": "edwardmartinsjr@gmail.com",
+                    "Name": "Edward Martins"
+                    },
+                    "To": [
+                        {
+                            "Email": "edwardmartinsjr@gmail.com",
+                            "Name": "Edward Martins"
+                            }
+                            ],
+                            "Subject": "Hacker News - Data Engineer Stories",
+                            "TextPart": "Hacker News - Data Engineer Stories",
+                            "HTMLPart": "<h3>Dear Edward!</h3><br />This is the top Data Engineer Stories: <br /> {}".format(data_engineer_stories),
+                            "CustomID": "AppGettingStartedTest"
+                            }
+                            ]
+                            }
+
+    try:
+        if data_engineer_stories:        
+            r = mailjet.send.create(data=data)
+            if r.status_code == 200:
+                logger.info("E-mail sent.")
+            else:
+                logger.error(f"Error code: [{r.status_code}]")
+    except BaseException as err:
+        logger.error(f"Error [{err}]")
+        raise SystemExit()
+
+if __name__ == "__main__":
+    scan_hacker_news("")
+
 
 
 
